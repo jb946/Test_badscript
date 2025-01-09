@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard
+    user: "1001:1001"
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE  # Optional, for loading WireGuard kernel module if not present
+    environment:
+      - PUID=1001                  # Replace with your user ID (ensure it matches the host user ID)
+      - PGID=1001                  # Replace with your group ID (ensure it matches the host group ID)
+      - TZ=Europe/Paris                 # Set your timezone (replace if needed)
+      # - SERVERURL=wireguard.domain.com  # Optional, your WireGuard server URL or IP
+      - SERVERPORT=51820           # Optional, WireGuard port (default is 51820)
+      #- PEERS=1                    # Optional, number of peers (set according to your needs)
+      #- PEERDNS=auto               # Optional, DNS for peers (e.g., "auto" or a custom DNS server)
+      - INTERNAL_SUBNET=fd00:abcd:1234::/64 # Optional, internal network subnet (adjust to your network)
+      - ALLOWEDIPS=fd00:abcd:1234::/64       # Optional, set allowed IP ranges for the VPN
+      #- PERSISTENTKEEPALIVE_PEERS= # Optional, comma-separated list of peers to keep alive (e.g., "peer1,peer2")
+      - LOG_CONFS=true             # Optional, show configuration QR codes in logs (set to true or false)
+    volumes:
+      - /etc/wireguard:/config  # Path to store WireGuard configuration files on the host
+      - /lib/modules:/lib/modules # Optional, for loading kernel modules (required if needed)
+    ports:
+      - 51820:51820/udp            # Expose WireGuard port (51820 UDP is the default)
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped

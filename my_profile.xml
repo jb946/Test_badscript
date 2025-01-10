@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<benchmark xmlns="http://cpe.mitre.org/lists/1.0">
+  <version>1.0</version>
+  <title>Custom Security Benchmark for Ubuntu</title>
+  <description>Profil personnalisé de sécurité pour Ubuntu, incluant plusieurs vérifications de configurations de sécurité.</description>
+
+  <!-- Vérification des services en cours -->
+  <check system="linux" check_id="check_surprising_services">
+    <title>Vérifier les services actifs</title>
+    <description>Repérer les services surprenants qui tournent.</description>
+    <check_data>...</check_data>
+    <command>
+      <name>systemctl list-units --type=service</name>
+      <expected_output>...</expected_output>
+    </command>
+  </check>
+
+  <!-- Vérification de la configuration du pare-feu -->
+  <check system="linux" check_id="check_firewall">
+    <title>Vérifier la configuration du pare-feu</title>
+    <description>Vérifier si le pare-feu est activé et correctement configuré.</description>
+    <check_data>...</check_data>
+    <command>
+      <name>sudo ufw status verbose</name>
+      <expected_output>active</expected_output>
+    </command>
+  </check>
+
+  <!-- Vérification de la configuration SSH -->
+  <check system="linux" check_id="check_ssh_config">
+    <title>Vérifier la configuration SSH</title>
+    <description>Vérifier que SSH est configuré pour utiliser des clés et non des mots de passe.</description>
+    <check_data>...</check_data>
+    <command>
+      <name>grep PasswordAuthentication /etc/ssh/sshd_config</name>
+      <expected_output>no</expected_output>
+    </command>
+  </check>
+
+  <!-- Vérifier si le port SSH a été modifié -->
+  <check system="linux" check_id="check_ssh_port">
+    <title>Vérifier si le port SSH par défaut a été modifié</title>
+    <description>Vérifier si le port SSH a été changé du port par défaut (22).</description>
+    <check_data>...</check_data>
+    <command>
+      <name>grep Port /etc/ssh/sshd_config</name>
+      <expected_output>22</expected_output>
+    </command>
+  </check>
+
+  <!-- Vérification des connexions SSH limitées -->
+  <check system="linux" check_id="check_ssh_limitations">
+    <title>Vérifier la limitation des connexions SSH</title>
+    <description>Vérifier si les connexions SSH sont limitées correctement.</description>
+    <check_data>...</check_data>
+    <command>
+      <name>grep MaxAuthTries /etc/ssh/sshd_config</name>
+      <expected_output>3</expected_output>
+    </command>
+  </check>
+
+  <!-- Vérification de l'activation des logs -->
+  <check system="linux" check_id="check_log_activation">
+    <title>Vérifier si les journaux sont activés</title>
+    <description>Vérifier que les journaux de système sont activés via rsyslog.</description>
+    <check_data>...</check_data>
+    <command>
+      <name>systemctl status rsyslog</name>
+      <expected_output>active</expected_output>
+    </command>
+  </check>
+
+  <!-- Vérification de l'état de Fail2ban -->
+  <check system="linux" check_id="check_fail2ban">
+    <title>Vérifier si Fail2ban est actif</title>
+    <description>Vérifier que Fail2ban est bien installé et actif.</description>
+    <check_data>...</check_data>
+    <command>
+      <name>sudo systemctl status fail2ban</name>
+      <expected_output>active</expected_output>
+    </command>
+  </check>
+
+  <!-- Vérification des permissions des répertoires sensibles -->
+  <check system="linux" check_id="check_permissions_sensitive_dirs">
+    <title>Vérifier les permissions des répertoires sensibles</title>
+    <description>Vérifier que les répertoires sensibles ont des permissions sécurisées.</description>
+    <check_data>...</check_data>
+    <command>
+      <name>find /etc -type d ! -perm 700</name>
+      <expected_output>...</expected_output>
+    </command>
+  </check>
+
+  <!-- Vérification des sudoers -->
+  <check system="linux" check_id="check_sudoers">
+    <title>Vérifier les utilisateurs ayant accès à sudo</title>
+    <description>Vérifier la configuration sudo et les permissions d'utilisation de sudo.</description>
+    <check_data>...</check_data>
+    <command>
+      <name>sudo -l</name>
+      <expected_output>...</expected_output>
+    </command>
+  </check>
+
+</benchmark>

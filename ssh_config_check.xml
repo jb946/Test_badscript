@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oval_definitions xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+  <generator>
+    <product_name>OpenSCAP</product_name>
+    <schema_version>5.11</schema_version>
+    <timestamp>2025-01-10T00:00:00</timestamp>
+  </generator>
+
+  <definitions>
+    <definition id="oval:custom:def:ssh_config" class="compliance">
+      <metadata>
+        <title>Check SSH Configuration</title>
+        <description>Ensure SSH is configured to use keys and not passwords.</description>
+        <reference source="local" ref_id="ssh_config"/>
+      </metadata>
+      <criteria>
+        <criterion test_ref="oval:custom:tst:ssh_password_authentication" comment="SSH PasswordAuthentication should be set to 'no'." />
+      </criteria>
+    </definition>
+  </definitions>
+
+  <tests>
+    <test id="oval:custom:tst:ssh_password_authentication" check="all" check_existence="all_exist" comment="Check SSH PasswordAuthentication setting">
+      <textfilecontent54_test>
+        <object object_ref="oval:custom:obj:sshd_config" />
+        <state state_ref="oval:custom:ste:ssh_password_authentication" />
+      </textfilecontent54_test>
+    </test>
+  </tests>
+
+  <objects>
+    <textfilecontent54_object id="oval:custom:obj:sshd_config">
+      <filepath>/etc/ssh/sshd_config</filepath>
+      <pattern operation="equals">^PasswordAuthentication</pattern>
+    </textfilecontent54_object>
+  </objects>
+
+  <states>
+    <textfilecontent54_state id="oval:custom:ste:ssh_password_authentication">
+      <value_of operation="equals">no</value_of>
+    </textfilecontent54_state>
+  </states>
+</oval_definitions>

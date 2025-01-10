@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oval_definitions xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+  <generator>
+    <product_name>OpenSCAP</product_name>
+    <schema_version>5.11</schema_version>
+    <timestamp>2025-01-10T00:00:00</timestamp>
+  </generator>
+
+  <definitions>
+    <definition id="oval:custom:def:fail2ban_status" class="compliance">
+      <metadata>
+        <title>Check Fail2ban Status</title>
+        <description>Ensure Fail2ban is installed and active.</description>
+        <reference source="local" ref_id="fail2ban_status"/>
+      </metadata>
+      <criteria>
+        <criterion test_ref="oval:custom:tst:fail2ban_active" comment="Fail2ban should be active." />
+      </criteria>
+    </definition>
+  </definitions>
+
+  <tests>
+    <test id="oval:custom:tst:fail2ban_active" check="all" check_existence="at_least_one_exists" comment="Check Fail2ban status">
+      <command_test>
+        <object object_ref="oval:custom:obj:fail2ban_active" />
+        <state state_ref="oval:custom:ste:fail2ban_active" />
+      </command_test>
+    </test>
+  </tests>
+
+  <objects>
+    <command_object id="oval:custom:obj:fail2ban_active">
+      <name>systemctl status fail2ban</name>
+    </command_object>
+  </objects>
+
+  <states>
+    <command_state id="oval:custom:ste:fail2ban_active">
+      <stdout operation="contains">active</stdout>
+    </command_state>
+  </states>
+</oval_definitions>

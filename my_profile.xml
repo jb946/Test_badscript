@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xccdf:Benchmark xmlns:xccdf="http://checklists.nist.gov/xccdf/1.2">
+<xccdf:Benchmark xmlns:xccdf="http://checklists.nist.gov/xccdf/1.2" id="custom-benchmark-ubuntu">
+  <xccdf:status>draft</xccdf:status>
   <xccdf:title>Custom Security Benchmark for Ubuntu</xccdf:title>
   <xccdf:description>
     Profil personnalisé de sécurité pour Ubuntu, incluant plusieurs vérifications de configurations de sécurité.

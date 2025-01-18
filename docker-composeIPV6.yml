@@ -1,0 +1,37 @@
+networks:
+  wg6:
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: "fd00:abcd:1234::/64"
+
+services:
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.eth0.proxy_ndp=1
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=Europe/Paris
+      - SERVERURL=172.16.0.2  # Adresse IPv4 de l'hôte
+      - SERVERPORT=51820
+      - PEERS=1
+      - INTERNAL_SUBNET=fd00:abcd:1234::/64  # Sous-réseau interne IPv6
+      - ALLOWEDIPS=::/0
+      - LOG_CONFS=true
+    volumes:
+      - /opt/wireguard/config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    networks:
+      - wg6
+    restart: unless-stopped

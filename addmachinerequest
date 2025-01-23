@@ -1,0 +1,6 @@
+curl -X POST http://172.16.0.11:8080/add_machine -H "Content-Type: application/json" -d '{
+  "name": "MyMachine",
+  "description": "Test machine for API",
+  "id_client": 1,
+  "id_os": 1
+}'

@@ -1,0 +1,90 @@
+#!/bin/bash
+
+# Define MySQL credentials
+MYSQL_USER="root"
+MYSQL_PASSWORD="rootroot"
+DATABASE_NAME="my_database"
+
+# SQL commands to create the tables
+SQL_COMMANDS="
+
+USE $DATABASE_NAME;
+
+CREATE TABLE client(
+   id_client INT,
+   firstname VARCHAR(50) NOT NULL,
+   lastname VARCHAR(50) NOT NULL,
+   phone_number VARCHAR(15),
+   email VARCHAR(50) NOT NULL,
+   company_name VARCHAR(50),
+   company_IP VARCHAR(15),
+   company_location VARCHAR(50),
+   password_hash_salted VARCHAR(100) NOT NULL,
+   iban VARCHAR(50),
+   private_key VARCHAR(50) NOT NULL,
+   infra_status INT NOT NULL,
+   PRIMARY KEY(id_client)
+);
+
+CREATE TABLE misconfig(
+   id_misconfig INT,
+   name VARCHAR(50) NOT NULL,
+   description VARCHAR(100),
+   criticity INT NOT NULL,
+   version VARCHAR(50) NOT NULL,
+   automatic_patch INT NOT NULL,
+   PRIMARY KEY(id_misconfig)
+);
+
+CREATE TABLE os(
+   id_os INT,
+   version VARCHAR(50) NOT NULL,
+   PRIMARY KEY(id_os)
+);
+
+CREATE TABLE bill(
+   id_bill INT,
+   paiement_date DATE,
+   start_period DATE NOT NULL,
+   end_period DATE NOT NULL,
+   amount DECIMAL(15,2),
+   id_client INT NOT NULL,
+   PRIMARY KEY(id_bill),
+   FOREIGN KEY(id_client) REFERENCES client(id_client)
+);
+
+CREATE TABLE machine(
+   id_machine INT,
+   name VARCHAR(50),
+   description VARCHAR(100),
+   activation_date DATETIME NOT NULL,
+   deletion_date DATETIME,
+   private_key VARCHAR(50) NOT NULL,
+   ipv6_address VARCHAR(50) NOT NULL,
+   id_os INT NOT NULL,
+   id_client INT NOT NULL,
+   PRIMARY KEY(id_machine),
+   FOREIGN KEY(id_os) REFERENCES os(id_os),
+   FOREIGN KEY(id_client) REFERENCES client(id_client)
+);
+
+CREATE TABLE audit(
+   id_audit INT,
+   date_audit DATETIME NOT NULL,
+   done INT NOT NULL,
+   id_machine INT NOT NULL,
+   PRIMARY KEY(id_audit),
+   FOREIGN KEY(id_machine) REFERENCES machine(id_machine)
+);
+
+CREATE TABLE audit_misconfig(
+   id_audit INT,
+   id_misconfig INT,
+   PRIMARY KEY(id_audit, id_misconfig),
+   FOREIGN KEY(id_audit) REFERENCES audit(id_audit),
+   FOREIGN KEY(id_misconfig) REFERENCES misconfig(id_misconfig)
+);
+"
+
+# Execute the SQL commands
+mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e "$SQL_COMMANDS"

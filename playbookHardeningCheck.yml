@@ -75,16 +75,16 @@
                 <h1>Hardening Report</h1>
                 <table border="1">
                   <tr><th>Check</th><th>Result</th><th>Priority</th><th>Status</th><th>Comment</th></tr>
-                  <tr><td>Password Expiration</td><td>{{ pass_max_days.stdout }}</td><td>High</td><td>{% if pass_max_days.stdout == 'PASS_MAX_DAYS 99999' %}Fail{% else %}Pass{% endif %}</td><td>Ensure password expiration is set to 90 days.</td></tr>
+                  <tr><td>Password Expiration</td><td>{{ pass_max_days.stdout }}</td><td>High</td><td>{% if pass_max_days.stdout != 'PASS_MAX_DAYS 99999' %}Pass{% else %}Fail{% endif %}</td><td>Ensure password expiration is set to 90 days.</td></tr>
                   <tr><td>SSH Root Login</td><td>{{ ssh_root_login.stdout }}</td><td>High</td><td>{% if ssh_root_login.stdout == 'PermitRootLogin no' %}Pass{% else %}Fail{% endif %}</td><td>Ensure SSH root login is disabled.</td></tr>
-                  <tr><td>Firewall Status</td><td>{{ firewall_status.stdout }}</td><td>High</td><td>{% if firewall_status.stdout == 'ufw not active' %}Fail{% else %}Pass{% endif %}</td><td>Ensure firewall is enabled.</td></tr>
+                  <tr><td>Firewall Status</td><td>{{ firewall_status.stdout }}</td><td>High</td><td>{% if firewall_status.stdout != 'ufw not active' %}Pass{% else %}Fail{% endif %}</td><td>Ensure firewall is enabled.</td></tr>
                   <tr><td>Unnecessary Services</td><td>{{ unnecessary_services.stdout }}</td><td>Medium</td><td>{% if unnecessary_services.stdout == 'No unnecessary services found' %}Pass{% else %}Fail{% endif %}</td><td>Ensure unnecessary services are disabled.</td></tr>
                   <tr><td>Automatic Updates</td><td>{{ auto_updates.stdout }}</td><td>High</td><td>{% if auto_updates.stdout == 'APT::Periodic::Update-Package-Lists "1";' %}Pass{% else %}Fail{% endif %}</td><td>Ensure automatic updates are enabled.</td></tr>
-                  <tr><td>Auditd Status</td><td>{{ auditd_status.stdout }}</td><td>High</td><td>{% if auditd_status.stdout == 'auditd not active' %}Fail{% else %}Pass{% endif %}</td><td>Ensure auditd is installed and running.</td></tr>
-                  <tr><td>SELinux Status</td><td>{{ selinux_status.stdout }}</td><td>High</td><td>{% if selinux_status.stdout == 'SELinux not enabled' %}Fail{% else %}Pass{% endif %}</td><td>Ensure SELinux is enabled.</td></tr>
-                  <tr><td>File Permissions</td><td>{{ file_permissions.stdout }}</td><td>High</td><td>{% if file_permissions.stdout == '-rw-r--r-- /etc/passwd -rw-r--r-- /etc/group' %}Fail{% else %}Pass{% endif %}</td><td>Ensure permissions on sensitive files are correct.</td></tr>
-                  <tr><td>Cron Restriction</td><td>{{ cron_restriction.stdout }}</td><td>Medium</td><td>{% if cron_restriction.stdout == 'cron not restricted' %}Fail{% else %}Pass{% endif %}</td><td>Ensure cron is restricted to authorized users.</td></tr>
-                  <tr><td>NTP Configuration</td><td>{{ ntp_status.stdout }}</td><td>High</td><td>{% if ntp_status.stdout == 'NTP not configured' %}Fail{% else %}Pass{% endif %}</td><td>Ensure NTP is configured.</td></tr>
+                  <tr><td>Auditd Status</td><td>{{ auditd_status.stdout }}</td><td>High</td><td>{% if auditd_status.stdout != 'auditd not active' %}Pass{% else %}Fail{% endif %}</td><td>Ensure auditd is installed and running.</td></tr>
+                  <tr><td>SELinux Status</td><td>{{ selinux_status.stdout }}</td><td>High</td><td>{% if selinux_status.stdout != 'SELinux not enabled' %}Pass{% else %}Fail{% endif %}</td><td>Ensure SELinux is enabled.</td></tr>
+                  <tr><td>File Permissions</td><td>{{ file_permissions.stdout }}</td><td>High</td><td>{% if file_permissions.stdout != '-rw-r--r-- /etc/passwd -rw-r--r-- /etc/group' %}Pass{% else %}Fail{% endif %}</td><td>Ensure permissions on sensitive files are correct.</td></tr>
+                  <tr><td>Cron Restriction</td><td>{{ cron_restriction.stdout }}</td><td>Medium</td><td>{% if cron_restriction.stdout != 'cron not restricted' %}Pass{% else %}Fail{% endif %}</td><td>Ensure cron is restricted to authorized users.</td></tr>
+                  <tr><td>NTP Configuration</td><td>{{ ntp_status.stdout }}</td><td>High</td><td>{% if ntp_status.stdout != 'NTP not configured' %}Pass{% else %}Fail{% endif %}</td><td>Ensure NTP is configured.</td></tr>
                 </table>
               </body>
             </html>
